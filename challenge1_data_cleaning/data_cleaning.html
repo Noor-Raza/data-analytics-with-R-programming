@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="ESADE MiBA Group 10">
+
+<title>Challenge 1: Barcelona Airbnb Listings</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Challenge_1_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Challenge_1_files/libs/quarto-html/quarto.js"></script>
+<script src="Challenge_1_files/libs/quarto-html/popper.min.js"></script>
+<script src="Challenge_1_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Challenge_1_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Challenge_1_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Challenge_1_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Challenge_1_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Challenge_1_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Challenge_1_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Challenge 1: Barcelona Airbnb Listings</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>ESADE MiBA Group 10 </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="data-cleaning-the-barcelona-airbnb-listings-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning-the-barcelona-airbnb-listings-dataset">Data Cleaning the Barcelona Airbnb Listings Dataset</h2>
+<p>The objective of this exercise is to <strong>apply essential data cleaning strategies</strong> to prepare the dataset for analysis. Data cleaning tasks include removing unnecessary features, handling inconsistencies, correcting data types, and generating simple insights.</p>
+<section id="importing-necessary-r-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="importing-necessary-r-libraries">Importing Necessary R Libraries</h3>
+<p>The following R libraries are necessary for performing the data manipulation tasks:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co">#includes tidyr, dplyr, stringr, purrr</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'data.table'
+
+The following objects are masked from 'package:lubridate':
+
+    hour, isoweek, mday, minute, month, quarter, second, wday, week,
+    yday, year
+
+The following objects are masked from 'package:dplyr':
+
+    between, first, last
+
+The following object is masked from 'package:purrr':
+
+    transpose</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="questions" class="level2">
+<h2 class="anchored" data-anchor-id="questions">Questions</h2>
+<section id="loading-the-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="loading-the-dataset">Loading the Dataset</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>airbnb <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">'/Users/alexanderlange/Desktop/barcelona_listings.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-1-create-a-vector-of-useless-features" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-1-create-a-vector-of-useless-features">Exercise 1: Create a vector of useless features</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>useless_features <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"zipcode"</span>, <span class="st">"city"</span>, <span class="st">"neighbourhood_cleansed"</span>, <span class="st">"street"</span>, </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"square_feet"</span>, <span class="st">"id"</span>, <span class="st">"host_url"</span>, <span class="st">"host_neighbourhood"</span>, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"neighbourhood"</span>, <span class="st">"listing_url"</span>, <span class="st">"name"</span>, <span class="st">"summary"</span>, <span class="st">"space"</span>, </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"description"</span>, <span class="st">"neighborhood_overview"</span>, <span class="st">"access"</span>, </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"picture_url"</span>, <span class="st">"host_name"</span>, <span class="st">"host_picture_url"</span>, <span class="st">"country"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-2" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-2">Exercise 2</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>airbnb_final <span class="ot">&lt;-</span> airbnb <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">all_of</span>(useless_features)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#2.1 Convert date columns to format YYYY-MM-DD and class Date</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(host_since, first_review, last_review), </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                <span class="sc">~</span> <span class="fu">as.Date</span>(.x, <span class="at">format =</span><span class="st">'%d/%m/%Y'</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#2.2 Convert t/f columns to booleans</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(host_is_superhost, host_has_profile_pic, host_identity_verified, </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                  is_location_exact, has_availability, instant_bookable), </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                <span class="sc">~</span> <span class="fu">case_when</span>(.x <span class="sc">==</span> <span class="st">'t'</span> <span class="sc">~</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                            .x <span class="sc">==</span> <span class="st">'f'</span> <span class="sc">~</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                            <span class="at">.default =</span> <span class="cn">NA</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#2.3 Convert currency columns (price and cleaning fee) to numeric</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(price, cleaning_fee), <span class="sc">~</span> <span class="fu">gsub</span>(<span class="st">'^</span><span class="sc">\\</span><span class="st">$'</span>, <span class="st">''</span>, .x))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(price, cleaning_fee), <span class="sc">~</span> <span class="fu">gsub</span>(<span class="st">','</span>, <span class="st">''</span>, .x))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(price, cleaning_fee), <span class="sc">~</span> <span class="fu">as.numeric</span>(.x))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">#2.4 Convert % columns (host_response_rate) to numeric</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">host_response_rate =</span> <span class="fu">gsub</span>(<span class="st">'[^0-9.]'</span>, <span class="st">''</span>, host_response_rate)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">host_response_rate =</span> <span class="fu">as.numeric</span>(host_response_rate)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">#2.5 Convert all string features to lowercase and remove accents</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), <span class="sc">~</span> <span class="fu">stri_trans_general</span>(<span class="fu">tolower</span>(.x), <span class="st">"Latin-ASCII"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-3.1-create-as-many-boolean-features-as-relevant-for-host_verifications" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-3.1-create-as-many-boolean-features-as-relevant-for-host_verifications">Exercise 3.1 Create as many boolean features as relevant for host_verifications</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure `host_verifications` is a character column</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>airbnb_final<span class="sc">$</span>host_verifications <span class="ot">&lt;-</span> <span class="fu">as.character</span>(airbnb_final<span class="sc">$</span>host_verifications)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle NA values by replacing them with an empty string</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>airbnb_final<span class="sc">$</span>host_verifications[<span class="fu">is.na</span>(airbnb_final<span class="sc">$</span>host_verifications)] <span class="ot">&lt;-</span> <span class="st">''</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove unwanted characters (square brackets and single quotes)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>host_verifications_cleaned <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">[|</span><span class="sc">\\</span><span class="st">]|'"</span>, <span class="at">replacement =</span> <span class="st">''</span>, <span class="at">x =</span> airbnb_final<span class="sc">$</span>host_verifications)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove spaces inside the verification names</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>host_verifications_cleaned <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">" "</span>, <span class="at">replacement =</span> <span class="st">''</span>, <span class="at">x =</span> host_verifications_cleaned)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine values and keep separated using commas</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>host_verifications_cleaned <span class="ot">&lt;-</span> <span class="fu">paste</span>(host_verifications_cleaned, <span class="at">collapse =</span> <span class="st">','</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the host_verifications column into separate verification methods</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>host_verifications_cleaned <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">str_split</span>(host_verifications_cleaned, <span class="at">pattern =</span> <span class="st">','</span>))</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique verification methods</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>host_verifications_cleaned <span class="ot">&lt;-</span> <span class="fu">unique</span>(host_verifications_cleaned)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>host_verifications_cleaned <span class="ot">&lt;-</span> host_verifications_cleaned[host_verifications_cleaned <span class="sc">!=</span> <span class="st">''</span>]  </span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boolean columns for each verification method</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>list_host_verifications <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="at">.x =</span> host_verifications_cleaned, </span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">.f =</span> <span class="sc">~</span> <span class="fu">as.integer</span>(<span class="fu">str_detect</span>(airbnb_final<span class="sc">$</span>host_verifications, <span class="fu">fixed</span>(.x))))</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns properly</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(list_host_verifications) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'has_verification_'</span>, host_verifications_cleaned)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Bind new boolean columns with the original dataset</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>airbnb_final <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(airbnb_final, list_host_verifications)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-3.2-create-as-many-boolean-features-as-relevant-for-amenities" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-3.2-create-as-many-boolean-features-as-relevant-for-amenities">Exercise 3.2 Create as many boolean features as relevant for amenities</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>airbnb_final<span class="sc">$</span>amenities <span class="ot">&lt;-</span> <span class="fu">as.character</span>(airbnb_final<span class="sc">$</span>amenities)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>airbnb_final<span class="sc">$</span>amenities[<span class="fu">is.na</span>(airbnb_final<span class="sc">$</span>amenities)] <span class="ot">&lt;-</span> <span class="st">''</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>amenities_cleaned <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">'</span><span class="sc">\\</span><span class="st">{|</span><span class="sc">\\</span><span class="st">}'</span>, <span class="at">replacement =</span> <span class="st">''</span>, <span class="at">x =</span> airbnb_final<span class="sc">$</span>amenities)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>amenities_cleaned <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">'"</span><span class="sc">\\\\</span><span class="st">'</span>, <span class="at">replacement =</span> <span class="st">''</span>, <span class="at">x =</span> amenities_cleaned)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>amenities_cleaned <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">'"'</span>, <span class="at">replacement =</span> <span class="st">''</span>, <span class="at">x =</span> amenities_cleaned)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>amenities_cleaned <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">' '</span>, <span class="at">replacement =</span> <span class="st">''</span>, <span class="at">x =</span> amenities_cleaned) </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>amenities_cleaned <span class="ot">&lt;-</span> <span class="fu">paste</span>(amenities_cleaned, <span class="at">collapse =</span> <span class="st">','</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>amenities_cleaned <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">str_split</span>(amenities_cleaned, <span class="at">pattern =</span> <span class="st">','</span>)) </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>amenities_cleaned <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">unlist</span>(amenities_cleaned))</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>amenities_cleaned <span class="ot">&lt;-</span> amenities_cleaned[amenities_cleaned <span class="sc">!=</span> <span class="st">''</span>] </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boolean columns for each unique amenity</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>list_amenities <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="at">.x =</span> amenities_cleaned, </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">.f =</span> <span class="sc">~</span> <span class="fu">as.integer</span>(<span class="fu">str_detect</span>(airbnb_final<span class="sc">$</span>amenities, <span class="fu">fixed</span>(.x))))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(list_amenities) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'has_amenity_'</span>, amenities_cleaned)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>airbnb_final <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(airbnb_final, list_amenities)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(airbnb_final)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classes 'data.table' and 'data.frame':  19833 obs. of  252 variables:
+ $ host_id                                             : int  71615 71615 82522 90417 108310 134698 134698 136853 136853 141199 ...
+ $ host_since                                          : Date, format: "2010-01-19" "2010-01-19" ...
+ $ host_response_time                                  : chr  "within an hour" "within an hour" "within a few hours" "within an hour" ...
+ $ host_response_rate                                  : num  99 99 100 100 100 100 100 92 92 100 ...
+ $ host_is_superhost                                   : logi  FALSE FALSE FALSE TRUE TRUE FALSE ...
+ $ host_listings_count                                 : int  45 45 2 5 1 9 9 41 41 1 ...
+ $ host_verifications                                  : chr  "['email', 'phone', 'reviews', 'jumio', 'government_id']" "['email', 'phone', 'reviews', 'jumio', 'government_id']" "['email', 'phone', 'reviews', 'jumio', 'offline_government_id', 'government_id']" "['email', 'phone', 'reviews', 'jumio', 'offline_government_id', 'selfie', 'government_id', 'identity_manual']" ...
+ $ host_has_profile_pic                                : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...
+ $ host_identity_verified                              : logi  TRUE TRUE TRUE TRUE TRUE FALSE ...
+ $ neighbourhood_group_cleansed                        : chr  "sant marti" "eixample" "sant marti" "sant marti" ...
+ $ latitude                                            : num  41.4 41.4 41.4 41.4 41.4 ...
+ $ longitude                                           : num  2.19 2.17 2.2 2.22 2.16 ...
+ $ is_location_exact                                   : logi  TRUE TRUE TRUE FALSE TRUE TRUE ...
+ $ property_type                                       : chr  "apartment" "apartment" "apartment" "apartment" ...
+ $ room_type                                           : chr  "entire home/apt" "entire home/apt" "private room" "entire home/apt" ...
+ $ accommodates                                        : int  6 8 2 6 2 2 3 4 5 1 ...
+ $ bathrooms                                           : num  1 2 1 2 1 1 1 1 1.5 1 ...
+ $ bedrooms                                            : int  2 3 1 3 1 1 1 1 3 1 ...
+ $ beds                                                : int  4 6 1 8 1 2 2 1 3 1 ...
+ $ amenities                                           : chr  "{tv,internet,wifi,\"\"air conditioning\"\",\"\"wheelchair accessible\"\",kitchen,elevator,\"\"free street parki"| __truncated__ "{tv,internet,wifi,\"\"air conditioning\"\",\"\"wheelchair accessible\"\",kitchen,elevator,\"\"free street parki"| __truncated__ "{tv,wifi,kitchen,\"\"paid parking off premises\"\",elevator,heating,\"\"family/kid friendly\"\",washer,dryer,\""| __truncated__ "{tv,internet,wifi,\"\"wheelchair accessible\"\",kitchen,\"\"paid parking off premises\"\",elevator,\"\"buzzer/w"| __truncated__ ...
+ $ price                                               : num  130 60 33 210 45 42 53 75 85 30 ...
+ $ cleaning_fee                                        : num  42 50 NA 80 NA NA NA 55 105 0 ...
+ $ minimum_nights                                      : int  3 1 2 3 1 3 3 1 1 29 ...
+ $ maximum_nights                                      : int  730 1125 1125 1125 730 1125 1125 27 27 60 ...
+ $ has_availability                                    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...
+ $ availability_30                                     : int  0 3 4 11 8 5 3 2 3 4 ...
+ $ availability_60                                     : int  0 20 8 33 19 8 8 17 19 4 ...
+ $ availability_90                                     : int  0 50 15 63 41 16 15 29 31 4 ...
+ $ availability_365                                    : int  182 129 15 318 115 211 211 266 257 26 ...
+ $ number_of_reviews                                   : int  1 15 119 45 241 4 40 174 79 19 ...
+ $ number_of_reviews_ltm                               : int  0 10 36 16 49 0 2 34 15 0 ...
+ $ first_review                                        : Date, format: "2015-10-10" "2013-05-27" ...
+ $ last_review                                         : Date, format: "2015-10-10" "2019-07-02" ...
+ $ review_scores_rating                                : int  80 87 90 95 95 95 87 92 88 99 ...
+ $ review_scores_accuracy                              : int  10 9 10 10 10 9 9 9 9 10 ...
+ $ review_scores_cleanliness                           : int  10 9 9 10 10 10 9 9 9 10 ...
+ $ review_scores_checkin                               : int  2 10 10 10 10 10 9 8 9 10 ...
+ $ review_scores_communication                         : int  10 10 10 10 10 10 9 9 10 10 ...
+ $ review_scores_location                              : int  10 9 9 9 10 9 8 9 9 9 ...
+ $ review_scores_value                                 : int  8 8 9 9 9 9 9 9 9 9 ...
+ $ instant_bookable                                    : logi  FALSE TRUE FALSE TRUE TRUE FALSE ...
+ $ reviews_per_month                                   : num  0.02 0.2 3.08 0.44 2.22 0.08 0.81 1.7 0.76 0.18 ...
+ $ has_verification_email                              : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_verification_phone                              : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_verification_reviews                            : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_verification_jumio                              : int  1 1 1 1 1 0 0 1 1 0 ...
+ $ has_verification_government_id                      : int  1 1 1 1 1 0 0 1 1 0 ...
+ $ has_verification_offline_government_id              : int  0 0 1 1 1 0 0 1 1 0 ...
+ $ has_verification_selfie                             : int  0 0 0 1 1 0 0 0 0 0 ...
+ $ has_verification_identity_manual                    : int  0 0 0 1 1 0 0 0 0 0 ...
+ $ has_verification_facebook                           : int  0 0 0 0 0 0 0 1 1 1 ...
+ $ has_verification_none                               : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_manual_offline                     : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_work_email                         : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_sent_id                            : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_google                             : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_manual_online                      : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_photographer                       : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_kba                                : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_zhima_selfie                       : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_weibo                              : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_sesame                             : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_verification_sesame_offline                     : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_tv                                      : int  1 1 1 1 1 0 0 1 1 0 ...
+ $ has_amenity_internet                                : int  1 1 0 1 0 0 0 0 0 1 ...
+ $ has_amenity_wifi                                    : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_amenity_airconditioning                         : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_wheelchairaccessible                    : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_kitchen                                 : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_amenity_elevator                                : int  1 1 1 1 1 0 0 1 1 1 ...
+ $ has_amenity_freestreetparking                       : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_heating                                 : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_amenity_family/kidfriendly                      : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_washer                                  : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_amenity_dryer                                   : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_amenity_essentials                              : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ has_amenity_shampoo                                 : int  1 1 1 1 1 1 1 0 0 0 ...
+ $ has_amenity_hairdryer                               : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_hotwater                                : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_hostgreetsyou                           : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_paidparkingonpremises                   : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_buzzer/wirelessintercom                 : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_hangers                                 : int  0 1 1 1 1 1 1 0 0 1 ...
+ $ has_amenity_iron                                    : int  0 1 1 1 0 1 1 1 1 0 ...
+ $ has_amenity_laptopfriendlyworkspace                 : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_crib                                    : int  0 1 0 1 0 0 0 0 0 0 ...
+ $ has_amenity_paidparkingoffpremises                  : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_firstaidkit                             : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_selfcheck-in                            : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_smartlock                               : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_bedlinens                               : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_extrapillowsandblankets                 : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_microwave                               : int  0 0 1 1 0 1 1 0 0 1 ...
+ $ has_amenity_coffeemaker                             : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_refrigerator                            : int  0 0 1 1 0 1 1 0 0 1 ...
+ $ has_amenity_dishwasher                              : int  0 0 1 1 0 0 0 0 0 1 ...
+ $ has_amenity_dishesandsilverware                     : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_cookingbasics                           : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ has_amenity_oven                                    : int  0 0 1 1 0 1 1 0 0 1 ...
+  [list output truncated]
+ - attr(*, ".internal.selfref")=&lt;externalptr&gt; </code></pre>
+</div>
+</div>
+</section>
+<section id="exercise-4-create-a-frequency-table" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-4-create-a-frequency-table">Exercise 4: Create a frequency table</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>freq_table <span class="ot">&lt;-</span> airbnb_final <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(neighbourhood_group_cleansed, property_type, <span class="at">name =</span> <span class="st">"count"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(freq_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     neighbourhood_group_cleansed property_type count
+                           &lt;char&gt;        &lt;char&gt; &lt;int&gt;
+  1:                     eixample     apartment  5651
+  2:                 ciutat vella     apartment  4005
+  3:               sants-montjuic     apartment  1978
+  4:                   sant marti     apartment  1818
+  5:                       gracia     apartment  1394
+ ---                                                 
+165:          sarria-sant gervasi       cottage     1
+166:          sarria-sant gervasi     farm stay     1
+167:          sarria-sant gervasi        hostel     1
+168:          sarria-sant gervasi    tiny house     1
+169:          sarria-sant gervasi     townhouse     1</code></pre>
+</div>
+</div>
+</section>
+<section id="exercise-5-select-most-frequent-amenity" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-5-select-most-frequent-amenity">Exercise 5: Select most frequent amenity</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select only amenity columns considering the fact that all start with 'has_amenity_'</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>amenity_columns <span class="ot">&lt;-</span> <span class="fu">select</span>(airbnb_final, <span class="fu">starts_with</span>(<span class="st">"has_amenity_"</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum each amenity column to count occurrences</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>amenities_freq <span class="ot">&lt;-</span> <span class="fu">colSums</span>(amenity_columns) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"amenity"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">frequency =</span> <span class="st">"."</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(frequency))</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(amenities_freq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                 amenity frequency
+1                                       has_amenity_wifi     19377
+2                                 has_amenity_essentials     18642
+3                                    has_amenity_kitchen     17480
+4                                    has_amenity_hangers     16159
+5                                      has_amenity_dryer     16004
+6                                     has_amenity_washer     15557
+7                                    has_amenity_heating     15051
+8                                       has_amenity_iron     14533
+9                                         has_amenity_tv     13983
+10                                   has_amenity_shampoo     12466
+11                                  has_amenity_elevator     12081
+12                              has_amenity_refrigerator      8295
+13                                 has_amenity_microwave      7563
+14                                      has_amenity_oven      6478
+15                                     has_amenity_stove      5631
+16                                  has_amenity_internet      5286
+17                                   has_amenity_balcony      4385
+18                                has_amenity_dishwasher      3956
+19                                      has_amenity_crib      3775
+20                                 has_amenity_breakfast      1488
+21                                    has_amenity_toilet      1233
+22                                   has_amenity_bathtub      1116
+23                                   has_amenity_doorman       916
+24                                      has_amenity_pool       563
+25                                has_amenity_beachfront       421
+26                                     has_amenity_other       399
+27                                has_amenity_waterfront       392
+28                                    has_amenity_cat(s)       327
+29                                       has_amenity_gym       252
+30                                   has_amenity_lockbox       245
+31                                    has_amenity_dog(s)       236
+32                                    has_amenity_keypad       161
+33                            has_amenity_ski-in/ski-out        61
+34                                   has_amenity_netflix        56
+35                                   has_amenity_terrace        51
+36                               has_amenity_kitchenette        38
+37                                     has_amenity_bidet        33
+38                                   has_amenity_mudroom        11
+39                                   has_amenity_printer         9
+40                                   has_amenity_hammock         4
+41                                     has_amenity_sauna         2
+42                           has_amenity_airconditioning         0
+43                      has_amenity_wheelchairaccessible         0
+44                         has_amenity_freestreetparking         0
+45                        has_amenity_family/kidfriendly         0
+46                                 has_amenity_hairdryer         0
+47                                  has_amenity_hotwater         0
+48                             has_amenity_hostgreetsyou         0
+49                     has_amenity_paidparkingonpremises         0
+50                   has_amenity_buzzer/wirelessintercom         0
+51                   has_amenity_laptopfriendlyworkspace         0
+52                    has_amenity_paidparkingoffpremises         0
+53                               has_amenity_firstaidkit         0
+54                              has_amenity_selfcheck-in         0
+55                                 has_amenity_smartlock         0
+56                                 has_amenity_bedlinens         0
+57                   has_amenity_extrapillowsandblankets         0
+58                               has_amenity_coffeemaker         0
+59                       has_amenity_dishesandsilverware         0
+60                             has_amenity_cookingbasics         0
+61                            has_amenity_patioorbalcony         0
+62                     has_amenity_luggagedropoffallowed         0
+63                    has_amenity_cleaningbeforecheckout         0
+64                    has_amenity_nostairsorstepstoenter         0
+65                     has_amenity_wideentranceforguests         0
+66                   has_amenity_flatpathtoguestentrance         0
+67                    has_amenity_well-litpathtoentrance         0
+68                              has_amenity_wideentryway         0
+69                             has_amenity_smokedetector         0
+70                    has_amenity_carbonmonoxidedetector         0
+71                          has_amenity_fireextinguisher         0
+72                                 has_amenity_highchair         0
+73                     has_amenity_pack'nplay/travelcrib         0
+74                      has_amenity_longtermstaysallowed         0
+75                              has_amenity_widehallways         0
+76                            has_amenity_smokingallowed         0
+77                         has_amenity_lockonbedroomdoor         0
+78  has_amenity_translationmissing:en.hosting_amenity_50         0
+79                         has_amenity_privatelivingroom         0
+80                    has_amenity_petsliveonthisproperty         0
+81                                   has_amenity_cabletv         0
+82                                has_amenity_safetycard         0
+83                           has_amenity_24-hourcheck-in         0
+84                                    has_amenity_hottub         0
+85                           has_amenity_privateentrance         0
+86  has_amenity_translationmissing:en.hosting_amenity_49         0
+87                      has_amenity_room-darkeningshades         0
+88                               has_amenity_petsallowed         0
+89                                has_amenity_pocketwifi         0
+90                            has_amenity_hotwaterkettle         0
+91                       has_amenity_extraspacearoundbed         0
+92                      has_amenity_accessible-heightbed         0
+93                   has_amenity_accessible-heighttoilet         0
+94                             has_amenity_buildingstaff         0
+95                           has_amenity_beachessentials         0
+96                              has_amenity_wideentrance         0
+97                     has_amenity_wideclearancetoshower         0
+98                         has_amenity_suitableforevents         0
+99                           has_amenity_indoorfireplace         0
+100                                 has_amenity_babybath         0
+101                   has_amenity_children'sbooksandtoys         0
+102                has_amenity_babysitterrecommendations         0
+103                                 has_amenity_bodysoap         0
+104                                has_amenity_bathtowel         0
+105                              has_amenity_toiletpaper         0
+106                           has_amenity_breakfasttable         0
+107                          has_amenity_espressomachine         0
+108                         has_amenity_formaldiningarea         0
+109                       has_amenity_memoryfoammattress         0
+110                          has_amenity_bedroomcomforts         0
+111                       has_amenity_bathroomessentials         0
+112                    has_amenity_freeparkingonpremises         0
+113                             has_amenity_windowguards         0
+114                       has_amenity_ethernetconnection         0
+115                       has_amenity_handheldshowerhead         0
+116                         has_amenity_gardenorbackyard         0
+117                          has_amenity_singlelevelhome         0
+118               has_amenity_widedoorwaytoguestbathroom         0
+119                               has_amenity_lakeaccess         0
+120                            has_amenity_roll-inshower         0
+121                              has_amenity_showerchair         0
+122                     has_amenity_children'sdinnerware         0
+123                             has_amenity_outletcovers         0
+124                             has_amenity_washer/dryer         0
+125                                has_amenity_evcharger         0
+126                     has_amenity_bathtubwithbathchair         0
+127                            has_amenity_changingtable         0
+128                                 has_amenity_bbqgrill         0
+129                                has_amenity_beachview         0
+130                          has_amenity_ensuitebathroom         0
+131                           has_amenity_outdoorseating         0
+132                           has_amenity_outdoorparking         0
+133                              has_amenity_babymonitor         0
+134                              has_amenity_gameconsole         0
+135                               has_amenity_ceilingfan         0
+136                               has_amenity_rainshower         0
+137                          has_amenity_heatedtowelrack         0
+138                                  has_amenity_gasoven         0
+139                                   has_amenity_daybed         0
+140                           has_amenity_convectionoven         0
+141                            has_amenity_standingvalet         0
+142                       has_amenity_pillow-topmattress         0
+143                               has_amenity_soakingtub         0
+144                            has_amenity_walk-inshower         0
+145                              has_amenity_fullkitchen         0
+146                   has_amenity_centralairconditioning         0
+147                                  has_amenity_smarttv         0
+148                        has_amenity_tablecornerguards         0
+149                              has_amenity_otherpet(s)         0
+150                   has_amenity_fixedgrabbarsforshower         0
+151                                has_amenity_dvdplayer         0
+152                     has_amenity_electricprofilingbed         0
+153                          has_amenity_fireplaceguards         0
+154                              has_amenity_mobilehoist         0
+155                      has_amenity_disabledparkingspot         0
+156                               has_amenity_stairgates         0
+157                               has_amenity_minifridge         0
+158                             has_amenity_mountainview         0
+159                                    has_amenity_hbogo         0
+160                        has_amenity_exerciseequipment         0
+161                             has_amenity_firmmattress         0
+162                              has_amenity_soundsystem         0
+163                                has_amenity_steamoven         0
+164                              has_amenity_tenniscourt         0
+165                          has_amenity_privatebathroom         0
+166                              has_amenity_sunloungers         0
+167                   has_amenity_fixedgrabbarsfortoilet         0
+168                              has_amenity_privatepool         0
+169                               has_amenity_winecooler         0
+170                                has_amenity_jettedtub         0
+171                               has_amenity_amazonecho         0
+172                                has_amenity_murphybed         0
+173                             has_amenity_heatedfloors         0
+174                          has_amenity_alfrescobathtub         0
+175                            has_amenity_privatehottub         0
+176                           has_amenity_outdoorkitchen         0
+177                         has_amenity_touchlessfaucets         0
+178                            has_amenity_warmingdrawer         0
+179                       has_amenity_projectorandscreen         0
+180                                has_amenity_sharedgym         0
+181                               has_amenity_sharedpool         0
+182                                has_amenity_poolcover         0
+183                        has_amenity_poolwithpoolhoist         0
+184                               has_amenity_doubleoven         0
+185           has_amenity_high-resolutioncomputermonitor         0
+186                                has_amenity_heatlamps         0
+187                        has_amenity_groundflooraccess         0
+188                               has_amenity_faxmachine         0
+189                              has_amenity_airpurifier         0</code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
